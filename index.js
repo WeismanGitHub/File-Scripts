@@ -1,10 +1,9 @@
 const { dirname, parse, resolve } = require('path')
 const chokidar = require('chokidar');
 const { rename } = require("fs");
-require('dotenv').config();
 
 const watcher = chokidar.watch(
-    process.env.PATHS,
+    ['../../../../_Downloaded Content/Movies', '../../../../_Downloaded Content/Shows'],
     { persistent: true, awaitWriteFinish: true }
 );
 
