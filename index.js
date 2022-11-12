@@ -4,7 +4,7 @@ const { rename } = require("fs");
 require('dotenv').config();
 
 const watcher = chokidar.watch(
-    '../../../../_Downloaded Content/test',
+    process.env.PATHS,
     { persistent: true, awaitWriteFinish: true }
 );
 
