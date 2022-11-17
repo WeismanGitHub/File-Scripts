@@ -16,13 +16,21 @@ watcher.on('add', function(path) {
 
     const normalizedPath = resolve(splitPath.join('\\'))
 
-    rename(dirname(path), normalizedPath, (err) => {})
-    
+    if (resolve(dirname(path)) !== normalizedPath) {
+        rename(dirname(path), normalizedPath, (err) => {if (err) console.log(err)})
+    }
+})
+
+watcher.on('add', function(path) {
     // Rename files
-    const name = parse(path).name
     const extension = parse(path).ext
+    const name = parse(path).name
+    const dir = dirname(path)
+
     const normalizedName = name.replaceAll('.', ' ').split('1080p')[0]
     .split('WEBRip')[0].split('720p')[0].split('BDRip')[0].split('REMASTERED')[0].trim('')
     
-    rename(path, resolve(normalizedPath, normalizedName + extension), (err) => {})
+    if (normalizedName !== name) {
+        rename(path, resolve(dir, normalizedName + extension), (err) => {if (err) console.log(err)})
+    }
 })
