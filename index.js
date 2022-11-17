@@ -8,11 +8,21 @@ const watcher = chokidar.watch(
 );
 
 watcher.on('add', function(path) {
+    // Rename folders
+    const splitPath = dirname(path).split('\\')
+    
+    splitPath[splitPath.length - 1] = splitPath[splitPath.length - 1].replaceAll('.', ' ').split('1080p')[0]
+    .split('WEBRip')[0].split('720p')[0].split('BDRip')[0].split('REMASTERED')[0].trim('')
+
+    const normalizedPath = resolve(splitPath.join('\\'))
+
+    rename(dirname(path), normalizedPath, (err) => {})
+    
+    // Rename files
     const name = parse(path).name
     const extension = parse(path).ext
-    const dir = dirname(path)
     const normalizedName = name.replaceAll('.', ' ').split('1080p')[0]
-    .split('WEBRip')[0].split('720p')[0].split('BDRip')[0].trim('')
+    .split('WEBRip')[0].split('720p')[0].split('BDRip')[0].split('REMASTERED')[0].trim('')
     
-    rename(path, resolve(dir, normalizedName + extension), (err) => {})
+    rename(path, resolve(normalizedPath, normalizedName + extension), (err) => {})
 })
