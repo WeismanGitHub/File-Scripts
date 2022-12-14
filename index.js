@@ -3,7 +3,7 @@ const chokidar = require('chokidar');
 const { rename } = require("fs");
 
 const watcher = chokidar.watch(
-    ['../../../../_Downloaded Content/Movies', '../../../../_Downloaded Content/Shows'],
+    ['../../../../_Downloaded Content/Movies', '../../../../_Downloaded Content/Shows', '../../../../_Downloaded Content/Subtitles'],
     { persistent: true, awaitWriteFinish: true }
 );
 
