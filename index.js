@@ -12,7 +12,7 @@ watcher.on('add', function(path) {
     const splitPath = dirname(path).split('\\')
     
     splitPath[splitPath.length - 1] = splitPath[splitPath.length - 1].replaceAll('.', ' ').split('1080p')[0]
-    .split('WEBRip')[0].split('720p')[0].split('BDRip')[0][0].trim('')
+    .split('WEBRip')[0].split('720p')[0].split('BDRip')[0].trim('')
 
     const normalizedPath = resolve(splitPath.join('\\'))
 
