@@ -26,7 +26,6 @@ watcher.on('add', function(path) { // rename files
     const dir = dirname(path)
 
     if (name.toUpperCase() == 'RARBG') {
-        console.log(name)
         return unlink(resolve(dir, name + extension), (err) => { if (err) throw err })
     }
 
