@@ -1,14 +1,13 @@
 const { dirname, parse, resolve } = require('path')
+const { rename, unlink } = require("fs");
 const chokidar = require('chokidar');
-const { rename } = require("fs");
 
 const watcher = chokidar.watch(
     ['../../../../_Downloaded Content/Movies', '../../../../_Downloaded Content/Shows', '../../../../_Downloaded Content/Subtitles'],
     { persistent: true, awaitWriteFinish: true }
 );
 
-watcher.on('add', function(path) {
-    // Rename folders
+watcher.on('add', function(path) { // rename folders
     const splitPath = dirname(path).split('\\')
     
     splitPath[splitPath.length - 1] = splitPath[splitPath.length - 1].replaceAll('.', ' ').split('1080p')[0]
@@ -21,11 +20,15 @@ watcher.on('add', function(path) {
     }
 })
 
-watcher.on('add', function(path) {
-    // Rename files
+watcher.on('add', function(path) { // rename files
     const extension = parse(path).ext
     const name = parse(path).name
     const dir = dirname(path)
+
+    if (name.toUpperCase() == 'RARBG') {
+        console.log(name)
+        return unlink(resolve(dir, name + extension), (err) => { if (err) throw err })
+    }
 
     const normalizedName = name.replaceAll('.', ' ').split('1080p')[0]
     .split('WEBRip')[0].split('720p')[0].split('BDRip')[0].trim('')
