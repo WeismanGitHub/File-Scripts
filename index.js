@@ -10,9 +10,9 @@ const watcher = chokidar.watch(
 watcher.on('add', function(path) { // rename folders
     const splitPath = dirname(path).split('\\')
     
-    splitPath[splitPath.length - 1] = splitPath[splitPath.length - 1].replaceAll('.', ' ').split('1080p')[0]
-    .split('WEBRip')[0].split('720p')[0].split('BDRip')[0].trim('')
-
+    splitPath[splitPath.length - 1] = splitPath[splitPath.length - 1].replaceAll('.', ' ')
+    .split('1080p')[0].split('720p')[0].replace('REMASTERED', '').replace('PROPER', '').trim()
+    
     const normalizedPath = resolve(splitPath.join('\\'))
 
     if (resolve(dirname(path)) !== normalizedPath) {
@@ -29,8 +29,8 @@ watcher.on('add', function(path) { // rename files
         return unlink(resolve(dir, name + extension), (err) => { if (err) throw err })
     }
 
-    const normalizedName = name.replaceAll('.', ' ').split('1080p')[0]
-    .split('WEBRip')[0].split('720p')[0].split('BDRip')[0].trim('')
+    const normalizedName = name.replaceAll('.', ' ').split('1080p')[0].split('720p')[0]
+    .replace('REMASTERED', '').replace('PROPER', '').trim()
     
     if (normalizedName !== name) {
         rename(path, resolve(dir, normalizedName + extension), (err) => {if (err) console.log(err)})
