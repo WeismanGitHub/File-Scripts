@@ -1,11 +1,9 @@
 const { dirname, parse, resolve } = require('path')
+const { dirsToRename } = require('./config')
 const { rename, unlink } = require("fs");
 const chokidar = require('chokidar');
 
-const watcher = chokidar.watch(
-    ['../../../../_Downloaded Content/Movies', '../../../../_Downloaded Content/Shows', '../../../../_Downloaded Content/Subtitles'],
-    { persistent: true, awaitWriteFinish: true }
-);
+const watcher = chokidar.watch(dirsToRename, { persistent: true, awaitWriteFinish: true });
 
 watcher.on('add', function(path) { // rename folders
     const splitPath = dirname(path).split('\\')
@@ -24,7 +22,7 @@ watcher.on('add', function(path) { // rename files
     const extension = parse(path).ext
     const name = parse(path).name
     const dir = dirname(path)
-
+    
     if (name.toUpperCase() == 'RARBG') {
         return unlink(resolve(dir, name + extension), (err) => { if (err) throw err })
     }
