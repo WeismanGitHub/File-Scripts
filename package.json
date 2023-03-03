@@ -1,8 +1,9 @@
 {
   "dependencies": {
     "chokidar": "^3.5.3",
+    "dotenv": "^16.0.3",
     "file": "^0.2.2",
-    "fluent-ffmpeg": "^2.1.2"
+    "get-video-duration": "^4.1.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
