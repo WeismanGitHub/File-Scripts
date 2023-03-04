@@ -7,9 +7,10 @@ module.exports = {
     ],
     // SORT CONFIG
     dirToSort: '../../../../_Downloaded Content/Movies',
-    sortByAge: false,
+    sortByAge: false, // Sorts by release date at the end of file name. EX: The Thing 1982
     sortByName: false,
-    sortByLength: false,
+    sortByLength: true,
+    sortBySize: false,
+    sortByFileLifeTime: false,
     reverse: true,
-    sortBySize: true,
 }
