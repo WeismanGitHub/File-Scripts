@@ -8,7 +8,7 @@ const {
     sortByName,
     sortByLength,
     sortBySize,
-    sortByFileLifeTime,
+    sortByFileAge,
     reverse,
     walkDirectories,
 } = require('./config')
@@ -43,7 +43,7 @@ async function sortPaths(paths) {
         )
     }
 
-    if (sortByFileLifeTime) {
+    if (sortByFileAge) {
         sortedPaths = paths.sort((a, b) => 
             statSync(b).birthtime -statSync(a).birthtime
         )
