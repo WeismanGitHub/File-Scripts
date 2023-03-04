@@ -1,5 +1,6 @@
 const { getVideoDurationInSeconds } = require('get-video-duration')
-const { readdirSync } = require('fs');
+const { dirname, parse, resolve } = require('path')
+const { readdirSync, statSync } = require('fs');
 const file = require("file");
 const {
     dirToSort,
@@ -7,20 +8,22 @@ const {
     reverse,
     sortByName,
     sortByLength,
+    sortBySize,
+    sortByFileLifeTime,
 } = require('./config')
 
-const allFiles = []
+const allPaths = []
 
 file.walkSync(dirToSort, (directory) => {
-    const files = readdirSync(directory).filter(file => /\d\d\d\d/g.test(file))
-    allFiles.push(...files)
+    const paths = readdirSync(directory).filter(file => /\d\d\d\d/g.test(file)).map(file => resolve(directory, file))
+    allPaths.push(...paths)
 })
 
-function sortFiles(files) {
-    let sortedFiles;
+function sortFiles(paths) {
+    let sortedPaths = [];
 
     if (sortByAge) {
-        sortedFiles = files.sort((a, b) => {
+        sortedPaths = paths.sort((a, b) => {
             const aMatches = a.match(/\d\d\d\d/g)
             const bMatches = b.match(/\d\d\d\d/g)
             
@@ -29,22 +32,20 @@ function sortFiles(files) {
     }
     
     if (sortByName) {
-        sortedFiles = files.sort()
+        sortedPaths = paths.sort()
     }
 
-    if (sortByLength) {
-        sortedFiles = files.sort((a, b) => {
-            // getVideoDurationInSeconds('video.mov').then((duration) => {
-            //     console.log(duration)
-            // })
-        })
+    if (sortBySize) {
+        sortedPaths = paths.sort((a, b) => 
+            statSync(a).size -statSync(b).size
+        )
     }
 
     if (reverse) {
-        files.reverse()
+        paths.reverse()
     }
 
-    return sortedFiles
+    return sortedPaths.map(path => parse(path).name)
 }
 
-console.log(sortFiles(allFiles).join('\n'))
+console.log(sortFiles(allPaths).join('\n'))
