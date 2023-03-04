@@ -13,4 +13,5 @@ module.exports = {
     sortBySize: false,
     sortByFileLifeTime: false,
     reverse: true,
+    walkDirectories: false,
 }
