@@ -7,8 +7,9 @@ module.exports = {
     ],
     // SORT CONFIG
     dirToSort: '../../../../_Downloaded Content/Movies',
-    sortByAge: true,
+    sortByAge: false,
     sortByName: false,
     sortByLength: false,
     reverse: true,
+    sortBySize: true,
 }
