@@ -6,12 +6,14 @@ module.exports = {
         '../../../../_Downloaded Content/Subtitles'
     ],
     // SORT CONFIG
-    dirToSort: '../../../../_Downloaded Content/Movies',
+    moviesDirectory: '../../../../_Downloaded Content/Movies',
+    subTitlesDirectory: '../../../../_Downloaded Content/Subtitles',
     sortByAge: false, // Sorts by release date at the end of file name. EX: The Thing 1982
     sortByName: false,
-    sortByLength: true,
+    sortByLength: false,
     sortBySize: false,
     sortByFileAge: false,
+    sortByCurseWords: true,
     reverse: true,
     walkDirectories: false,
 }
