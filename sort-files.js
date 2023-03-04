@@ -41,6 +41,12 @@ function sortFiles(paths) {
         )
     }
 
+    if (sortByFileLifeTime) {
+        sortedPaths = paths.sort((a, b) => 
+            statSync(a).birthtime -statSync(b).birthtime
+        )
+    }
+
     if (reverse) {
         paths.reverse()
     }
