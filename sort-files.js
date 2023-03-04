@@ -5,11 +5,11 @@ const file = require("file");
 const {
     dirToSort,
     sortByAge,
-    reverse,
     sortByName,
     sortByLength,
     sortBySize,
     sortByFileLifeTime,
+    reverse,
 } = require('./config')
 
 const allPaths = []
@@ -20,7 +20,7 @@ file.walkSync(dirToSort, (directory) => {
 })
 
 async function sortPaths(paths) {
-    let sortedPaths = [];
+    let sortedPaths = paths;
 
     if (sortByAge) {
         sortedPaths = paths.sort((a, b) => {
