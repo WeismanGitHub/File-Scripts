@@ -1,3 +1,3 @@
 Set oShell = CreateObject("WScript.Shell")
 
-oShell.run "node index.js", 0
+oShell.run "node rename-files.js", 0
