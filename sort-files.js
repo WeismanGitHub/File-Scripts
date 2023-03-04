@@ -40,7 +40,7 @@ async function sortPaths(paths) {
             return { path, duration: await getVideoDurationInSeconds(path) }
         }))
 
-        sortedPaths = pathsWithDuration.sort((a, b) => b.duration - a.duration).map(pathData => pathData.path)
+        sortedPaths = pathsWithDuration.sort((a, b) => a.duration - b.duration).map(pathData => pathData.path)
     }
 
     if (sortBySize) {
@@ -51,7 +51,7 @@ async function sortPaths(paths) {
 
     if (sortByFileLifeTime) {
         sortedPaths = paths.sort((a, b) => 
-            statSync(a).birthtime -statSync(b).birthtime
+            statSync(b).birthtime -statSync(a).birthtime
         )
     }
 
