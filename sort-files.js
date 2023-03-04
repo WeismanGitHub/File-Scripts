@@ -10,14 +10,8 @@ const {
     sortBySize,
     sortByFileLifeTime,
     reverse,
+    walkDirectories,
 } = require('./config')
-
-const allPaths = []
-
-file.walkSync(dirToSort, (directory) => {
-    const paths = readdirSync(directory).filter(file => /\d\d\d\d/g.test(file)).map(file => resolve(directory, file))
-    allPaths.push(...paths)
-})
 
 async function sortPaths(paths) {
     let sortedPaths = paths;
@@ -60,6 +54,18 @@ async function sortPaths(paths) {
     }
 
     return sortedPaths
+}
+
+const allPaths = []
+
+if (walkDirectories) {
+    file.walkSync(dirToSort, (directory) => {
+        const paths = readdirSync(directory).filter(file => /\d\d\d\d/g.test(file)).map(file => resolve(directory, file))
+        allPaths.push(...paths)
+    })
+} else {
+    const paths = readdirSync(dirToSort).filter(file => /\d\d\d\d/g.test(file)).map(file => resolve(dirToSort, file))
+    allPaths.push(...paths)
 }
 
 sortPaths(allPaths).then(paths => {
