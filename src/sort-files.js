@@ -43,13 +43,13 @@ async function sortPaths(moviePaths, subtitlePaths) {
 
     if (sortBySize) {
         sortedPaths = moviePaths.sort((a, b) =>
-            statSync(a).size -statSync(b).size
+            statSync(a).size - statSync(b).size
         )
     }
 
     if (sortByFileAge) {
         sortedPaths = moviePaths.sort((a, b) => 
-            statSync(b).birthtime -statSync(a).birthtime
+            statSync(b).birthtime - statSync(a).birthtime
         )
     }
 
