@@ -15,6 +15,6 @@ module.exports = {
     sortBySize: false,
     sortByFileAge: false,
     sortByWords: true,
-    reverse: true,
+    reverse: false,
     walkDirectories: false,
 }
