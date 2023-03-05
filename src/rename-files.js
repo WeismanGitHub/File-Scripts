@@ -1,5 +1,5 @@
 const { dirname, parse, resolve } = require('path')
-const { dirsToRename } = require('./config')
+const { dirsToRename } = require('../config')
 const { rename, unlink } = require("fs");
 const chokidar = require('chokidar');
 

@@ -15,7 +15,7 @@ const {
     sortByWords,
     walkDirectories,
     reverse,
-} = require('./config')
+} = require('../config')
 
 async function sortPaths(moviePaths, subtitlePaths) {
     let sortedPaths = moviePaths;
