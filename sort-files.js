@@ -1,23 +1,27 @@
 const { getVideoDurationInSeconds } = require('get-video-duration')
-const { readdirSync, statSync } = require('fs');
-const { parse, resolve } = require('path')
+const { readdirSync, statSync, readFileSync } = require('fs');
+const { default: srtParser2 } = require('srt-parser-2');
+const { resolve, parse } = require('path')
 const file = require("file");
 const {
-    dirToSort,
+    moviesDirectory,
+    subTitlesDirectory,
+    words,
     sortByAge,
     sortByName,
     sortByLength,
     sortBySize,
     sortByFileAge,
-    reverse,
+    sortByWords,
     walkDirectories,
+    reverse,
 } = require('./config')
 
-async function sortPaths(paths) {
-    let sortedPaths = paths;
+async function sortPaths(moviePaths, subtitlePaths) {
+    let sortedPaths = moviePaths;
 
     if (sortByAge) {
-        sortedPaths = paths.sort((a, b) => {
+        sortedPaths = moviePaths.sort((a, b) => {
             const aMatches = a.match(/\d\d\d\d/g)
             const bMatches = b.match(/\d\d\d\d/g)
             
@@ -26,11 +30,11 @@ async function sortPaths(paths) {
     }
     
     if (sortByName) {
-        sortedPaths = paths.sort()
+        sortedPaths = moviePaths.sort()
     }
 
     if (sortByLength) {
-        const pathsWithDuration = await Promise.all(paths.map(async path => {
+        const pathsWithDuration = await Promise.all(moviePaths.map(async path => {
             return { path, duration: await getVideoDurationInSeconds(path) }
         }))
 
@@ -38,36 +42,63 @@ async function sortPaths(paths) {
     }
 
     if (sortBySize) {
-        sortedPaths = paths.sort((a, b) => 
+        sortedPaths = moviePaths.sort((a, b) =>
             statSync(a).size -statSync(b).size
         )
     }
 
     if (sortByFileAge) {
-        sortedPaths = paths.sort((a, b) => 
+        sortedPaths = moviePaths.sort((a, b) => 
             statSync(b).birthtime -statSync(a).birthtime
         )
     }
 
+    if (sortByWords) {
+        const regexList = words.map(word => new RegExp(word, "gi"))
+        const parser = new srtParser2()
+
+        const pathsWithCount = subtitlePaths.map(path => {
+            const text = parser.fromSrt(readFileSync(path, { encoding: "utf-8" }))
+            .map(part => part.text).join('')
+            let count = 0;
+
+            for (let regex of regexList) {
+                count += (text.match(regex) || []).length
+            }
+
+            return { path, count }
+        })
+
+        sortedPaths = pathsWithCount.sort((a, b) => a.count - b.count).map(pathWithCount => pathWithCount.path)
+    }
+
     if (reverse) {
-        paths.reverse()
+        sortedPaths.reverse()
     }
 
     return sortedPaths
 }
 
-const allPaths = []
+function getFilePaths(directory, walk=true) {
+    const filePaths = []
 
-if (walkDirectories) {
-    file.walkSync(dirToSort, (directory) => {
+    if (walk) {
+        file.walkSync(directory, (dir) => {
+            const paths = readdirSync(dir).filter(file => /\d\d\d\d/g.test(file)).map(file => resolve(dir, file))
+            filePaths.push(...paths)
+        })
+    } else {
         const paths = readdirSync(directory).filter(file => /\d\d\d\d/g.test(file)).map(file => resolve(directory, file))
-        allPaths.push(...paths)
-    })
-} else {
-    const paths = readdirSync(dirToSort).filter(file => /\d\d\d\d/g.test(file)).map(file => resolve(dirToSort, file))
-    allPaths.push(...paths)
+        filePaths.push(...paths)
+    }
+
+    return filePaths
 }
 
-sortPaths(allPaths).then(paths => {
+const subtitlePaths = getFilePaths(subTitlesDirectory, walkDirectories)
+const moviePaths = getFilePaths(moviesDirectory, walkDirectories)
+
+sortPaths(moviePaths, subtitlePaths)
+.then(paths => {
     console.log(paths.map(path => parse(path).name).join('\n'))
 })
