@@ -8,12 +8,13 @@ module.exports = {
     // SORT CONFIG
     moviesDirectory: '../../../../_Downloaded Content/Movies',
     subTitlesDirectory: '../../../../_Downloaded Content/Subtitles',
+    words: ['fuck', 'shit', 'ass', 'crap', 'bitch', 'cunt'],
     sortByAge: false, // Sorts by release date at the end of file name. EX: The Thing 1982
     sortByName: false,
     sortByLength: false,
     sortBySize: false,
     sortByFileAge: false,
-    sortByCurseWords: true,
+    sortByWords: true,
     reverse: true,
     walkDirectories: false,
 }
