@@ -7,12 +7,12 @@ const {
     moviesDirectory,
     subTitlesDirectory,
     words,
-    sortByAge,
-    sortByName,
-    sortByLength,
-    sortBySize,
-    sortByFileAge,
-    sortByWords,
+    byReleaseYear,
+    byName,
+    byLength,
+    bySize,
+    byFileAge,
+    byWords,
     walkDirectories,
     reverse,
 } = require('../config')
@@ -20,7 +20,7 @@ const {
 async function sortPaths(moviePaths, subtitlePaths) {
     let sortedPaths = moviePaths;
 
-    if (sortByAge) {
+    if (byReleaseYear) {
         sortedPaths = moviePaths.sort((a, b) => {
             const aMatches = a.match(/\d\d\d\d/g)
             const bMatches = b.match(/\d\d\d\d/g)
@@ -29,11 +29,11 @@ async function sortPaths(moviePaths, subtitlePaths) {
         })
     }
     
-    if (sortByName) {
+    if (byName) {
         sortedPaths = moviePaths.sort()
     }
 
-    if (sortByLength) {
+    if (byLength) {
         const pathsWithDuration = await Promise.all(moviePaths.map(async path => {
             return { path, duration: await getVideoDurationInSeconds(path) }
         }))
@@ -41,19 +41,19 @@ async function sortPaths(moviePaths, subtitlePaths) {
         sortedPaths = pathsWithDuration.sort((a, b) => a.duration - b.duration).map(pathData => pathData.path)
     }
 
-    if (sortBySize) {
+    if (bySize) {
         sortedPaths = moviePaths.sort((a, b) =>
             statSync(a).size - statSync(b).size
         )
     }
 
-    if (sortByFileAge) {
+    if (byFileAge) {
         sortedPaths = moviePaths.sort((a, b) => 
             statSync(b).birthtime - statSync(a).birthtime
         )
     }
 
-    if (sortByWords) {
+    if (byWords) {
         const regexList = words.map(word => new RegExp(word, "gi"))
         const parser = new srtParser2()
 
