@@ -8,5 +8,9 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.20"
+  },
+  "scripts": {
+    "sort": "node src/sort-files.js",
+    "count": "node src/count-files.js"
   }
 }
