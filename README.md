@@ -1,4 +1,6 @@
 # Directory-Renamer
-Something I made to clean up the names of files in some directories and sort my files.
+A few scripts to work with my files.
 
-(Windows) You can run the script silenty on startup by adding a shortcut to run.vbs in your startup folder.
+(Windows) You can run `rename-files.js` silenty on startup by adding a shortcut to `run.vbs` in your startup folder.
+
+Run the other scripts with `npm run sort` or `npm run count`.
