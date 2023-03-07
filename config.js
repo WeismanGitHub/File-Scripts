@@ -9,12 +9,12 @@ module.exports = {
     moviesDirectory: '../../../../_Downloaded Content/Movies',
     subTitlesDirectory: '../../../../_Downloaded Content/Subtitles',
     words: ['fuck', 'shit', 'ass', 'crap', 'bitch', 'cunt'],
-    sortByAge: false, // Sorts by release date at the end of file name. EX: The Thing 1982
-    sortByName: false,
-    sortByLength: false,
-    sortBySize: false,
-    sortByFileAge: false,
-    sortByWords: true,
+    byReleaseYear: false, // Sorts by release date at the end of file name. EX: The Thing 1982
+    byName: false,
+    byLength: false,
+    bySize: false,
+    byFileAge: false,
+    byWords: true,
     reverse: false,
     walkDirectories: false,
 }
