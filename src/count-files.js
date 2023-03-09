@@ -15,45 +15,65 @@ const {
     byWords,
     walkDirectories,
     reverse,
+    returnCount,
+    returnSortedByCount,
 } = require('../config')
 
-async function countPaths(moviePaths, subtitlePaths) {
-    let countedPaths = [];
+async function countPaths(paths, subtitlePaths) {
+    let countedPaths = {};
 
     if (byReleaseYear) {
-        sortedPaths = moviePaths.sort((a, b) => {
-            const aMatches = a.match(/\d\d\d\d/g)
-            const bMatches = b.match(/\d\d\d\d/g)
-            
-            return aMatches[aMatches.length - 1] - bMatches[bMatches.length - 1]
+        paths.forEach(path => {
+            const year = path.match(/\d\d\d\d/g)[0]
+
+            if (countedPaths[year]) {
+                countedPaths[year].push(path.split(/\d\d\d\d/g)[0])
+            } else {
+                countedPaths[year] = [path.split(/\d\d\d\d/g)[0]]
+            }
         })
+
+        if (returnSortedByCount) {
+        }
+
+        const sortedPaths = []
+
+        for (let [year, paths] of Object.entries(countedPaths)) {
+            if (returnCount) {
+                sortedPaths.push(`${year}: ${paths.length}`)
+            } else {
+                sortedPaths.push(`${year}: ${paths.map(path => parse(path).name).join(' ')}`)
+            }
+        }
+
+        countedPaths = sortedPaths
     }
     
-    if (sortByName) {
-        sortedPaths = moviePaths.sort()
+    if (byName) {
+        countedPaths = paths.sort()
     }
 
-    if (sortByLength) {
-        const pathsWithDuration = await Promise.all(moviePaths.map(async path => {
+    if (byLength) {
+        const pathsWithDuration = await Promise.all(paths.map(async path => {
             return { path, duration: await getVideoDurationInSeconds(path) }
         }))
 
-        sortedPaths = pathsWithDuration.sort((a, b) => a.duration - b.duration).map(pathData => pathData.path)
+        countedPaths = pathsWithDuration.sort((a, b) => a.duration - b.duration).map(pathData => pathData.path)
     }
 
-    if (sortBySize) {
-        sortedPaths = moviePaths.sort((a, b) =>
+    if (bySize) {
+        countedPaths = paths.sort((a, b) =>
             statSync(a).size - statSync(b).size
         )
     }
 
-    if (sortByFileAge) {
-        sortedPaths = moviePaths.sort((a, b) => 
+    if (byFileAge) {
+        countedPaths = paths.sort((a, b) => 
             statSync(b).birthtime - statSync(a).birthtime
         )
     }
 
-    if (sortByWords) {
+    if (byWords) {
         const regexList = words.map(word => new RegExp(word, "gi"))
         const parser = new srtParser2()
 
@@ -69,14 +89,14 @@ async function countPaths(moviePaths, subtitlePaths) {
             return { path, count }
         })
 
-        sortedPaths = pathsWithCount.sort((a, b) => a.count - b.count).map(pathWithCount => pathWithCount.path)
+        countedPaths = pathsWithCount.sort((a, b) => a.count - b.count).map(pathWithCount => pathWithCount.path)
     }
 
     if (reverse) {
-        sortedPaths.reverse()
+        countedPaths.reverse()
     }
 
-    return sortedPaths
+    return countedPaths
 }
 
 function getFilePaths(directory, walk=true) {
@@ -99,6 +119,6 @@ const subtitlePaths = getFilePaths(subTitlesDirectory, walkDirectories)
 const moviePaths = getFilePaths(moviesDirectory, walkDirectories)
 
 countPaths(moviePaths, subtitlePaths)
-.then(paths => {
-    console.log(paths.map(path => parse(path).name).join('\n'))
+.then(countData => {
+    console.log(countData)
 })
