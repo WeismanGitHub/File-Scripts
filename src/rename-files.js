@@ -9,7 +9,7 @@ watcher.on('add', function(path) { // rename folders
     const splitPath = dirname(path).split('\\')
     
     splitPath[splitPath.length - 1] = splitPath[splitPath.length - 1].replaceAll('.', ' ')
-    .split('1080p')[0].split('720p')[0].replace('REMASTERED', '').replace('PROPER', '').trim()
+    .split('1080p')[0].split('720p')[0].split('WEBRip')[0].replace('REMASTERED', '').replace('PROPER', '').trim()
     
     const normalizedPath = resolve(splitPath.join('\\'))
 
@@ -28,7 +28,7 @@ watcher.on('add', function(path) { // rename files
     }
 
     const normalizedName = name.replaceAll('.', ' ').split('1080p')[0].split('720p')[0]
-    .replace('REMASTERED', '').replace('PROPER', '').trim()
+    .split('WEBRip')[0].replace('REMASTERED', '').replace('PROPER', '').trim()
     
     if (normalizedName !== name) {
         rename(path, resolve(dir, normalizedName + extension), (err) => {if (err) console.log(err)})
